@@ -1,10 +1,11 @@
 require("dotenv").config();
 const Discord = require("discord.js");
 const mongoose = require("mongoose");
+const deleteAllMessage = require("./functions/deleteAllMessage");
 const sendEmbed = require("./functions/sendEmbed");
 const mongoUri = require("./mongoUri");
 const client = new Discord.Client();
-const channelId = "810916167605944361";
+const channelId = "811186867391037461";
 
 mongoose
     .connect(mongoUri, {
@@ -22,19 +23,32 @@ client.on("ready", async () => {
         try {
             let msg = await channel.messages.fetch(lastMessageID);
             let embededMsg = await sendEmbed();
-            msg.edit(embededMsg);
+            await msg.edit(embededMsg);
             setInterval(async () => {
                 let embededMsg = await sendEmbed();
                 msg.edit(embededMsg);
-            }, 1000 * 60 * 10);
+            }, 1000 * 20);
         } catch (error) {
-            if (error.httpStatus === 404) {
+            if (error.httpStatus === 403) {
+                await deleteAllMessage(channel);
+
                 let embededMsg = await sendEmbed();
                 channel.send(embededMsg).then((msg) => {
                     setInterval(async () => {
                         let embededMsg = await sendEmbed();
                         msg.edit(embededMsg);
-                    }, 1000 * 60 * 10);
+                    }, 1000 * 20);
+                });
+            }
+
+            if (error.httpStatus === 404) {
+                let embededMsg = await sendEmbed();
+
+                channel.send(embededMsg).then((msg) => {
+                    setInterval(async () => {
+                        let embededMsg = await sendEmbed();
+                        msg.edit(embededMsg);
+                    }, 1000 * 20);
                 });
             }
         }
