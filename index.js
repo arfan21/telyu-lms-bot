@@ -27,7 +27,7 @@ client.on("ready", async () => {
             setInterval(async () => {
                 let embededMsg = await sendEmbed();
                 msg.edit(embededMsg);
-            }, 1000 * 20);
+            }, 1000 * 60 * 10);
         } catch (error) {
             if (error.httpStatus === 403) {
                 await deleteAllMessage(channel);
@@ -37,7 +37,7 @@ client.on("ready", async () => {
                     setInterval(async () => {
                         let embededMsg = await sendEmbed();
                         msg.edit(embededMsg);
-                    }, 1000 * 20);
+                    }, 1000 * 60 * 10);
                 });
             }
 
