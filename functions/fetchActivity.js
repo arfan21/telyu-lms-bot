@@ -12,12 +12,12 @@ module.exports = async () => {
     dateAfter.setDate(dateAfter.getDate() + 7);
     const dateAfterUnix = (dateAfter.getTime() / 1000).toFixed(0);
 
-    const session = readSession();
-    const sesskey = session.sesskey;
-    const moodlesession = session.moodlesession.value;
-
     return new Promise(async (resolve, reject) => {
-        const wrapper = async (n, sesskey, moodlesession) => {
+        const wrapper = async (n) => {
+            const session = readSession();
+            const sesskey = session.sesskey;
+            const moodlesession = session.moodlesession.value;
+
             await fetch(
                 `https://lms.telkomuniversity.ac.id/lib/ajax/service.php?sesskey=${sesskey}&info=core_calendar_get_action_events_by_timesort`,
                 {
@@ -60,11 +60,8 @@ module.exports = async () => {
                         if (n > 0) {
                             console.log(`retrying, attempt number ${n}`);
                             await getLMSsession();
-                            const session = readSession();
-                            wrapper(
-                                n--,
-                                session.sesskey.session.moodlesession.value
-                            );
+
+                            wrapper(n--);
                         } else {
                             reject(err);
                         }
@@ -76,19 +73,14 @@ module.exports = async () => {
                     if (n > 0) {
                         console.log(`retrying, attempt number ${n}`);
                         await getLMSsession();
-                        const session = readSession();
 
-                        wrapper(
-                            n--,
-                            session.sesskey,
-                            session.moodlesession.value
-                        );
+                        wrapper(n--);
                     } else {
                         reject(err);
                     }
                 });
         };
 
-        await wrapper(3, sesskey, moodlesession);
+        await wrapper(3);
     });
 };

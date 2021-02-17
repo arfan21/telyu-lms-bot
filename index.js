@@ -2,10 +2,11 @@ require("dotenv").config();
 const Discord = require("discord.js");
 const mongoose = require("mongoose");
 const deleteAllMessage = require("./functions/deleteAllMessage");
-const sendEmbed = require("./functions/sendEmbed");
+const embedMessage = require("./functions/embedMessage");
 const mongoUri = require("./mongoUri");
 const client = new Discord.Client();
-const channelId = "811186867391037461";
+const channelId = process.env.DISCORD_CHANNEL_ID;
+const timeInterval = 1000 * 15;
 
 mongoose
     .connect(mongoUri, {
@@ -16,45 +17,48 @@ mongoose
     .then(() => console.log("mongoDB Connected"))
     .catch((err) => console.log(err));
 
-client.on("ready", async () => {
-    client.channels.fetch(channelId).then(async (channel) => {
-        let lastMessageID = channel.lastMessageID;
+const sendMessageToChannel = async (channel) => {
+    let lastMessageID = channel.lastMessageID;
+    try {
+        console.log(`sending message to channel : ${channelId}`);
 
-        try {
-            let msg = await channel.messages.fetch(lastMessageID);
-            let embededMsg = await sendEmbed();
-            await msg.edit(embededMsg);
-            setInterval(async () => {
-                let embededMsg = await sendEmbed();
-                msg.edit(embededMsg);
-            }, 1000 * 60 * 10);
-        } catch (error) {
-            if (error.httpStatus === 403) {
-                await deleteAllMessage(channel);
+        let msg = await channel.messages.fetch(lastMessageID);
+        let embededMsg = await embedMessage();
+        await msg.edit(embededMsg);
 
-                let embededMsg = await sendEmbed();
-                channel.send(embededMsg).then((msg) => {
-                    setInterval(async () => {
-                        let embededMsg = await sendEmbed();
-                        msg.edit(embededMsg);
-                    }, 1000 * 60 * 10);
-                });
-            }
+        console.log(`SUCCESS : message sent`);
+    } catch (error) {
+        console.log(`ERROR : sending message to channel : ${channelId}`);
+        if (error.httpStatus === 403) {
+            await deleteAllMessage(channel);
+            console.log(`RETRY : sending message to channel : ${channelId}`);
 
-            if (error.httpStatus === 404) {
-                let embededMsg = await sendEmbed();
+            let embededMsg = await embedMessage();
+            await channel.send(embededMsg);
 
-                channel.send(embededMsg).then((msg) => {
-                    setInterval(async () => {
-                        let embededMsg = await sendEmbed();
-                        msg.edit(embededMsg);
-                    }, 1000 * 20);
-                });
-            }
+            console.log(`SUCCESS : message sent`);
         }
-    });
 
+        if (error.httpStatus === 404) {
+            console.log(`RETRY : sending message to channel : ${channelId}`);
+
+            let embededMsg = await embedMessage();
+            await channel.send(embededMsg);
+
+            console.log(`SUCCESS : message sent`);
+        }
+    }
+};
+
+client.on("ready", async () => {
     console.log(`Logged in as ${client.user.tag}!`);
+
+    client.channels.fetch(channelId).then(async (channel) => {
+        await sendMessageToChannel(channel);
+        setInterval(async () => {
+            await sendMessageToChannel(channel);
+        }, timeInterval);
+    });
 });
 
 client.on("message", (msg) => {

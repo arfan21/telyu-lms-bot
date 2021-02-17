@@ -4,7 +4,6 @@ const getTugas = require("./getTugas");
 const insertTugas = require("./insertTugas");
 
 module.exports = async () => {
-    console.log("sending message ....");
     const exampleEmbed = new Discord.MessageEmbed()
         .setColor("#0099ff")
         .setAuthor("Tugas IF-43-12 LMS Only", "https://i.imgur.com/wSTFkRM.png")
@@ -30,6 +29,5 @@ module.exports = async () => {
     } catch (error) {
         console.log(error);
     }
-    console.log("message sended ....");
     return exampleEmbed;
 };
