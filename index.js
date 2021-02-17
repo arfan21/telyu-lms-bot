@@ -34,7 +34,7 @@ const sendMessageToChannel = async (channel) => {
     const embededMsgFieldsLenght = embededMsg.fields.length;
 
     client.user.setActivity(
-        `LMS Ada ${embededMsgFieldsLenght} Tugas, cek channel ${channelName}`
+        `LMS Ada ${embededMsgFieldsLenght} Tugas|cek channel ${channelName}`
     );
 
     if (lastMessageID === null) {
