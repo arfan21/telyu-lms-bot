@@ -6,7 +6,7 @@ const embedMessage = require("./functions/embedMessage");
 const mongoUri = require("./mongoUri");
 const client = new Discord.Client();
 const channelId = process.env.DISCORD_CHANNEL_ID;
-const timeInterval = 1000 * 15;
+const timeInterval = 1000 * 60 * 10;
 
 mongoose
     .connect(mongoUri, {
