@@ -1,6 +1,5 @@
 const puppeteer = require("puppeteer");
 const fs = require("fs");
-const readSession = require("./readSession");
 const writeSession = require("./writeSession");
 module.exports = async () => {
     const browser = await puppeteer.launch({ headless: true });
@@ -72,5 +71,5 @@ module.exports = async () => {
     session.sesskey = sesskey;
     session.moodlesession = MoodleSession;
     await browser.close();
-    writeSession(session);
+    return session;
 };

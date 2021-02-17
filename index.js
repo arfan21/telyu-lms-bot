@@ -28,32 +28,39 @@ mongoose
     .catch((err) => console.log(err));
 
 const sendMessageToChannel = async (channel) => {
-    let lastMessageID = channel.lastMessageID;
+    const channelName = channel.name;
+    const lastMessageID = channel.lastMessageID;
+    const embededMsg = await embedMessage();
+    const embededMsgFieldsLenght = embededMsg.fields.length;
+
+    client.user.setActivity(
+        `LMS Ada ${embededMsgFieldsLenght} Tugas, cek channel ${channelName}`
+    );
+
     if (lastMessageID === null) {
         console.log(`sending message to channel : ${DISCORD_CHANNEL_ID}`);
-        let embededMsg = await embedMessage();
+
         await channel.send(embededMsg);
+
         console.log(`SUCCESS : message sent`);
     }
     try {
         console.log(`sending message to channel : ${DISCORD_CHANNEL_ID}`);
 
         let msg = await channel.messages.fetch(lastMessageID);
-        let embededMsg = await embedMessage();
+
         await msg.edit(embededMsg);
 
         console.log(`SUCCESS : message sent`);
     } catch (error) {
-        console.log(
-            `ERROR : sending message to channel : ${DISCORD_CHANNEL_ID}`
-        );
+        console.log(`ERROR : sending message to channel : ${error.message}`);
+
         if (error.httpStatus === 403) {
             await deleteAllMessage(channel);
             console.log(
                 `RETRY : sending message to channel : ${DISCORD_CHANNEL_ID}`
             );
 
-            let embededMsg = await embedMessage();
             await channel.send(embededMsg);
 
             console.log(`SUCCESS : message sent`);
@@ -64,7 +71,6 @@ const sendMessageToChannel = async (channel) => {
                 `RETRY : sending message to channel : ${DISCORD_CHANNEL_ID}`
             );
 
-            let embededMsg = await embedMessage();
             await channel.send(embededMsg);
 
             console.log(`SUCCESS : message sent`);

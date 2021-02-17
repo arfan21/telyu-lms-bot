@@ -1,6 +1,8 @@
 module.exports = async (channel) => {
+    const promises = [];
     let msg = await channel.messages.fetch();
-    msg.map(async (msg) => {
-        await msg.delete();
+    msg.map((msg) => {
+        promises.push(msg.delete());
     });
+    Promise.all(promises);
 };

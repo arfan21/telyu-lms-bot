@@ -1,7 +1,6 @@
-var originalFetch = require("isomorphic-fetch");
-const fetch = require("fetch-retry")(originalFetch);
-const getLMSsession = require("../configs/getLMSsession");
-const readSession = require("../configs/readSession");
+const fetch = require("node-fetch");
+const readSession = require("../helpers/readSession");
+const writeSession = require("../helpers/writeSession");
 
 module.exports = async () => {
     const dateBefore = new Date();
@@ -9,12 +8,12 @@ module.exports = async () => {
     const dateBeforeUnix = (dateBefore.getTime() / 1000).toFixed(0);
 
     const dateAfter = new Date();
-    dateAfter.setDate(dateAfter.getDate() + 7);
+    dateAfter.setDate(dateAfter.getDate() + 30);
     const dateAfterUnix = (dateAfter.getTime() / 1000).toFixed(0);
 
     return new Promise(async (resolve, reject) => {
         const wrapper = async (n) => {
-            const session = readSession();
+            const session = await readSession();
             const sesskey = session.sesskey;
             const moodlesession = session.moodlesession.value;
 
@@ -59,11 +58,11 @@ module.exports = async () => {
                     if (res[0].error) {
                         if (n > 0) {
                             console.log(`retrying, attempt number ${n}`);
-                            await getLMSsession();
+                            await writeSession();
 
                             wrapper(n--);
                         } else {
-                            reject(err);
+                            reject(res[0].error);
                         }
                     } else {
                         resolve(res[0]);
@@ -72,7 +71,7 @@ module.exports = async () => {
                 .catch(async (err) => {
                     if (n > 0) {
                         console.log(`retrying, attempt number ${n}`);
-                        await getLMSsession();
+                        await writeSession();
 
                         wrapper(n--);
                     } else {

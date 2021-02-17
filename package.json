@@ -9,8 +9,6 @@
   "dependencies": {
     "discord.js": "^12.5.1",
     "dotenv": "^8.2.0",
-    "fetch-retry": "^4.1.0",
-    "isomorphic-fetch": "^3.0.0",
     "mongoose": "^5.11.16",
     "node-fetch": "^2.6.1",
     "puppeteer": "^7.1.0"
