@@ -5,8 +5,18 @@ const deleteAllMessage = require("./functions/deleteAllMessage");
 const embedMessage = require("./functions/embedMessage");
 const mongoUri = require("./mongoUri");
 const client = new Discord.Client();
-const channelId = process.env.DISCORD_CHANNEL_ID;
-const timeInterval = 1000 * 60 * 10;
+const {
+    DISCORD_TOKEN,
+    DISCORD_CHANNEL_ID,
+    TIMEINTERVAL_MS,
+    TIMEINTERVAL_S,
+    TIMEINTERVAL_M,
+} = process.env;
+
+const timeInterval =
+    parseInt(TIMEINTERVAL_MS) *
+    parseInt(TIMEINTERVAL_S) *
+    parseInt(TIMEINTERVAL_M);
 
 mongoose
     .connect(mongoUri, {
@@ -20,13 +30,13 @@ mongoose
 const sendMessageToChannel = async (channel) => {
     let lastMessageID = channel.lastMessageID;
     if (lastMessageID === null) {
-        console.log(`sending message to channel : ${channelId}`);
+        console.log(`sending message to channel : ${DISCORD_CHANNEL_ID}`);
         let embededMsg = await embedMessage();
         await channel.send(embededMsg);
         console.log(`SUCCESS : message sent`);
     }
     try {
-        console.log(`sending message to channel : ${channelId}`);
+        console.log(`sending message to channel : ${DISCORD_CHANNEL_ID}`);
 
         let msg = await channel.messages.fetch(lastMessageID);
         let embededMsg = await embedMessage();
@@ -34,10 +44,14 @@ const sendMessageToChannel = async (channel) => {
 
         console.log(`SUCCESS : message sent`);
     } catch (error) {
-        console.log(`ERROR : sending message to channel : ${channelId}`);
+        console.log(
+            `ERROR : sending message to channel : ${DISCORD_CHANNEL_ID}`
+        );
         if (error.httpStatus === 403) {
             await deleteAllMessage(channel);
-            console.log(`RETRY : sending message to channel : ${channelId}`);
+            console.log(
+                `RETRY : sending message to channel : ${DISCORD_CHANNEL_ID}`
+            );
 
             let embededMsg = await embedMessage();
             await channel.send(embededMsg);
@@ -46,7 +60,9 @@ const sendMessageToChannel = async (channel) => {
         }
 
         if (error.httpStatus === 404) {
-            console.log(`RETRY : sending message to channel : ${channelId}`);
+            console.log(
+                `RETRY : sending message to channel : ${DISCORD_CHANNEL_ID}`
+            );
 
             let embededMsg = await embedMessage();
             await channel.send(embededMsg);
@@ -59,7 +75,7 @@ const sendMessageToChannel = async (channel) => {
 client.on("ready", async () => {
     console.log(`Logged in as ${client.user.tag}!`);
 
-    client.channels.fetch(channelId).then(async (channel) => {
+    client.channels.fetch(DISCORD_CHANNEL_ID).then(async (channel) => {
         await sendMessageToChannel(channel);
         setInterval(async () => {
             await sendMessageToChannel(channel);
@@ -73,4 +89,4 @@ client.on("message", (msg) => {
     }
 });
 
-client.login(process.env.DISCORD_TOKEN);
+client.login(DISCORD_TOKEN);
