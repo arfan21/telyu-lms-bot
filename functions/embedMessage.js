@@ -18,7 +18,9 @@ module.exports = async () => {
 
         const dataDB = await getTugas();
         dataDB.forEach((item) => {
-            const timeLocal = item.deadline.toLocaleString("id-ID");
+            const timeLocal = item.deadline.toLocaleString("id-ID", {
+                timeZone: "Asia/Jakarta",
+            });
 
             exampleEmbed.addField(
                 item.matkul,
