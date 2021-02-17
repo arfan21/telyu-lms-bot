@@ -19,6 +19,12 @@ mongoose
 
 const sendMessageToChannel = async (channel) => {
     let lastMessageID = channel.lastMessageID;
+    if (lastMessageID === null) {
+        console.log(`sending message to channel : ${channelId}`);
+        let embededMsg = await embedMessage();
+        await channel.send(embededMsg);
+        console.log(`SUCCESS : message sent`);
+    }
     try {
         console.log(`sending message to channel : ${channelId}`);
 
