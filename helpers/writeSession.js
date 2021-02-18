@@ -5,8 +5,7 @@ module.exports = async () => {
     try {
         const rawdata = await getLMSsession();
         const rawjson = JSON.stringify(rawdata);
-
-        fs.appendFileSync("session.json", rawjson);
+        fs.writeFileSync("session.json", rawjson, { flag: "w" });
         console.log("session saved");
     } catch (error) {
         console.log(error);

@@ -1,6 +1,5 @@
 const puppeteer = require("puppeteer");
-const fs = require("fs");
-const writeSession = require("./writeSession");
+
 module.exports = async () => {
     const browser = await puppeteer.launch({ headless: true });
     const page = await browser.newPage();
@@ -13,34 +12,33 @@ module.exports = async () => {
         await btn.click();
     });
     await page.waitForNavigation({ waitUntil: "networkidle0" });
+
     console.log("Login 365 ...");
     await page.type("#i0116", process.env.LMS_EMAIL);
     await page.click("#idSIButton9");
     await page.type("#i0118", process.env.LMS_PASSWORD);
     let btnVal = "";
     while (btnVal !== "Yes") {
-        await page
-            .$$("#idSIButton9")
-            .then(async (btn) => {
-                btn.forEach(async (b) => {
-                    await b
-                        .getProperty("value")
-                        .then(async (val) => {
-                            btnVal = await val.jsonValue();
-                            if (btnVal === "Sign in") {
-                                await page.click("#idSIButton9");
-                            }
-                            if (btnVal === "Yes") {
-                                await page.click("#idSIButton9");
-                            }
-                        })
-                        .catch((err) => {});
-                });
-            })
-            .catch((err) => {});
+        try {
+            const btn = await page.$$("#idSIButton9");
+            btn.forEach(async (btnProp) => {
+                try {
+                    let val = await btnProp.getProperty("value");
+                    btnVal = await val.jsonValue();
+
+                    if (btnVal === "Sign in") {
+                        await page.click("#idSIButton9");
+                    }
+                    if (btnVal === "Yes") {
+                        await page.click("#idSIButton9");
+                    }
+                } catch (error) {}
+            });
+        } catch (error) {}
     }
     console.log("redirect to lms ...");
     await page.waitForNavigation({ waitUntil: "domcontentloaded" });
+
     console.log("try to get sesskey and moodlesession ...");
     const data = await page.evaluate(() => {
         const list_a = Array.from(
@@ -64,12 +62,14 @@ module.exports = async () => {
             return;
         }
     });
+
     const session = {
         sesskey: "",
         moodlesession: {},
     };
     session.sesskey = sesskey;
     session.moodlesession = MoodleSession;
+
     await browser.close();
     return session;
 };
