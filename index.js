@@ -7,6 +7,7 @@ const client = new Discord.Client();
 
 const {
     DISCORD_TOKEN,
+    DISCORD_CHANNEL_ID,
     TIMEINTERVAL_MS,
     TIMEINTERVAL_S,
     TIMEINTERVAL_M,
