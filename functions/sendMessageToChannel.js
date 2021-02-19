@@ -6,17 +6,16 @@ const { DISCORD_CHANNEL_ID } = process.env;
 module.exports = async (channel, client) => {
     const channelName = channel.name;
     const lastMessageID = channel.lastMessageID;
-    const embededMsg = await embedMessage();
-    const embededMsgFieldsLenght = embededMsg.fields.length;
+    const { embed, banyak_tugas_lms } = await embedMessage();
 
     client.user.setActivity(
-        `LMS Ada ${embededMsgFieldsLenght} Tugas|cek channel ${channelName}`
+        `LMS Ada ${banyak_tugas_lms} Tugas|cek channel ${channelName}`
     );
 
     if (lastMessageID === null) {
         console.log(`sending message to channel : ${DISCORD_CHANNEL_ID}`);
 
-        await channel.send(embededMsg);
+        await channel.send(embed);
 
         console.log(`SUCCESS : message sent`);
     }
@@ -25,7 +24,7 @@ module.exports = async (channel, client) => {
 
         let msg = await channel.messages.fetch(lastMessageID);
 
-        await msg.edit(embededMsg);
+        await msg.edit(embed);
 
         console.log(`SUCCESS : message sent`);
     } catch (error) {
@@ -37,7 +36,7 @@ module.exports = async (channel, client) => {
                 `RETRY : sending message to channel : ${DISCORD_CHANNEL_ID}`
             );
 
-            await channel.send(embededMsg);
+            await channel.send(embed);
 
             console.log(`SUCCESS : message sent`);
         }
@@ -47,7 +46,7 @@ module.exports = async (channel, client) => {
                 `RETRY : sending message to channel : ${DISCORD_CHANNEL_ID}`
             );
 
-            await channel.send(embededMsg);
+            await channel.send(embed);
 
             console.log(`SUCCESS : message sent`);
         }
