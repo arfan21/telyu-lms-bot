@@ -33,41 +33,44 @@ module.exports = async () => {
                 true
             );
         });
-        // const { jarkom, sisop } = await getTugasLab();
-        // const timeNowMin = new Date();
-        // timeNowMin.setDate(timeNowMin.getDate() - 5);
+        const { jarkom, sisop } = await getTugasLab();
+        const timeNowMin = new Date();
+        timeNowMin.setDate(timeNowMin.getDate() - 5);
 
-        // exampleEmbed.addField("\u200B", "\u200B");
-        // exampleEmbed.addField(
-        //     "TUGAS LAB JARINGAN KOMPUTER",
-        //     "[di dapat dari website lab informatika](https://informatics.labs.telkomuniversity.ac.id/category/praktikum/jaringan-komputer/)",
-        //     false
-        // );
+        exampleEmbed.addField("\u200B", "\u200B");
+        exampleEmbed.addField(
+            "TUGAS LAB JARINGAN KOMPUTER",
+            "[sumber website lab informatika](https://informatics.labs.telkomuniversity.ac.id/category/praktikum/jaringan-komputer-if-it/)",
+            false
+        );
 
-        // if (!jarkom) {
-        //     exampleEmbed.addField(
-        //         "Belum ada tugas lab jaringan komputer",
-        //         new Date().toLocaleString("id-ID", {
-        //             timeZone: "Asia/Jakarta",
-        //         })
-        //     );
-        // } else if (jarkom.date < timeNowMin) {
-        //     exampleEmbed.addField(
-        //         "Belum ada tugas lab jaringan komputer",
-        //         new Date().toLocaleString("id-ID", {
-        //             timeZone: "Asia/Jakarta",
-        //         })
-        //     );
-        // } else {
-        //     exampleEmbed.addField(
-        //         jarkom.title,
-        //         `[Link Halaman](${jarkom.link_halaman})\n[Soal Tugas](${
-        //             jarkom.link_soal
-        //         })\n[Form Pengumpulan](${
-        //             jarkom.link_pengumpulan
-        //         })\nUploaded on ${jarkom.date.toDateString()}`
-        //     );
-        // }
+        if (!jarkom) {
+            exampleEmbed.addField(
+                "Belum ada tugas lab jaringan komputer",
+                new Date().toLocaleString("id-ID", {
+                    timeZone: "Asia/Jakarta",
+                })
+            );
+        } else if (jarkom.date < timeNowMin) {
+            exampleEmbed.addField(
+                "Belum ada tugas lab jaringan komputer",
+                new Date().toLocaleString("id-ID", {
+                    timeZone: "Asia/Jakarta",
+                })
+            );
+        } else {
+            exampleEmbed.addField(
+                jarkom.title,
+                `[Link Halaman](${jarkom.link_halaman})\n[Soal Tugas](${
+                    jarkom.link_soal
+                })\n[Form Pengumpulan](${
+                    jarkom.link_pengumpulan
+                })\nCreated at ${jarkom.date.toLocaleString("id-ID", {
+                    timeZone: "Asia/Jakarta",
+                    dateStyle: "medium",
+                })}`
+            );
+        }
 
         // exampleEmbed.addField("\u200B", "\u200B");
         // exampleEmbed.addField(

@@ -3,7 +3,7 @@ const puppeteer = require("puppeteer");
 const getJarkom = async (page) => {
     console.log("redirect to page jaringan komputer ...");
     await page.goto(
-        "https://informatics.labs.telkomuniversity.ac.id/category/praktikum/jaringan-komputer/",
+        "https://informatics.labs.telkomuniversity.ac.id/category/praktikum/jaringan-komputer-if-it/",
         {
             waitUntil: "networkidle2",
         }
