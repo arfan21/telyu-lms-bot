@@ -33,73 +33,73 @@ module.exports = async () => {
                 true
             );
         });
-        const { jarkom, sisop } = await getTugasLab();
-        const timeNowMin = new Date();
-        timeNowMin.setDate(timeNowMin.getDate() - 5);
+        // const { jarkom, sisop } = await getTugasLab();
+        // const timeNowMin = new Date();
+        // timeNowMin.setDate(timeNowMin.getDate() - 5);
 
-        exampleEmbed.addField("\u200B", "\u200B");
-        exampleEmbed.addField(
-            "TUGAS LAB JARINGAN KOMPUTER",
-            "[di dapat dari website lab informatika](https://informatics.labs.telkomuniversity.ac.id/category/praktikum/jaringan-komputer/)",
-            false
-        );
+        // exampleEmbed.addField("\u200B", "\u200B");
+        // exampleEmbed.addField(
+        //     "TUGAS LAB JARINGAN KOMPUTER",
+        //     "[di dapat dari website lab informatika](https://informatics.labs.telkomuniversity.ac.id/category/praktikum/jaringan-komputer/)",
+        //     false
+        // );
 
-        if (!jarkom) {
-            exampleEmbed.addField(
-                "Belum ada tugas lab jaringan komputer",
-                new Date().toLocaleString("id-ID", {
-                    timeZone: "Asia/Jakarta",
-                })
-            );
-        } else if (jarkom.date < timeNowMin) {
-            exampleEmbed.addField(
-                "Belum ada tugas lab jaringan komputer",
-                new Date().toLocaleString("id-ID", {
-                    timeZone: "Asia/Jakarta",
-                })
-            );
-        } else {
-            exampleEmbed.addField(
-                jarkom.title,
-                `[Link Halaman](${jarkom.link_halaman})\n[Soal Tugas](${
-                    jarkom.link_soal
-                })\n[Form Pengumpulan](${
-                    jarkom.link_pengumpulan
-                })\nUploaded on ${jarkom.date.toDateString()}`
-            );
-        }
+        // if (!jarkom) {
+        //     exampleEmbed.addField(
+        //         "Belum ada tugas lab jaringan komputer",
+        //         new Date().toLocaleString("id-ID", {
+        //             timeZone: "Asia/Jakarta",
+        //         })
+        //     );
+        // } else if (jarkom.date < timeNowMin) {
+        //     exampleEmbed.addField(
+        //         "Belum ada tugas lab jaringan komputer",
+        //         new Date().toLocaleString("id-ID", {
+        //             timeZone: "Asia/Jakarta",
+        //         })
+        //     );
+        // } else {
+        //     exampleEmbed.addField(
+        //         jarkom.title,
+        //         `[Link Halaman](${jarkom.link_halaman})\n[Soal Tugas](${
+        //             jarkom.link_soal
+        //         })\n[Form Pengumpulan](${
+        //             jarkom.link_pengumpulan
+        //         })\nUploaded on ${jarkom.date.toDateString()}`
+        //     );
+        // }
 
-        exampleEmbed.addField("\u200B", "\u200B");
-        exampleEmbed.addField(
-            "TUGAS LAB SISTEM OPERASI",
-            "[di dapat dari website lab informatika](https://informatics.labs.telkomuniversity.ac.id/category/praktikum/sistem-operasi/)",
-            false
-        );
+        // exampleEmbed.addField("\u200B", "\u200B");
+        // exampleEmbed.addField(
+        //     "TUGAS LAB SISTEM OPERASI",
+        //     "[di dapat dari website lab informatika](https://informatics.labs.telkomuniversity.ac.id/category/praktikum/sistem-operasi/)",
+        //     false
+        // );
 
-        if (!sisop) {
-            exampleEmbed.addField(
-                "Belum ada tugas lab sistem operasi",
-                new Date().toLocaleString("id-ID", {
-                    timeZone: "Asia/Jakarta",
-                })
-            );
-        } else if (sisop.date < timeNowMin) {
-            exampleEmbed.addField(
-                "Belum ada tugas lab sistem operasi",
-                new Date().toLocaleString("id-ID", {
-                    timeZone: "Asia/Jakarta",
-                })
-            );
-        } else {
-            exampleEmbed.addField(
-                sisop.title,
-                `[Link Halaman](${sisop.link_halaman})\n[Soal Tugas](${
-                    sisop.link_soal
-                })\n[Form Pengumpulan](${
-                    sisop.link_pengumpulan
-                })\nUploaded on ${jarkom.date.toDateString()}`
-            );
-        }
+        // if (!sisop) {
+        //     exampleEmbed.addField(
+        //         "Belum ada tugas lab sistem operasi",
+        //         new Date().toLocaleString("id-ID", {
+        //             timeZone: "Asia/Jakarta",
+        //         })
+        //     );
+        // } else if (sisop.date < timeNowMin) {
+        //     exampleEmbed.addField(
+        //         "Belum ada tugas lab sistem operasi",
+        //         new Date().toLocaleString("id-ID", {
+        //             timeZone: "Asia/Jakarta",
+        //         })
+        //     );
+        // } else {
+        //     exampleEmbed.addField(
+        //         sisop.title,
+        //         `[Link Halaman](${sisop.link_halaman})\n[Soal Tugas](${
+        //             sisop.link_soal
+        //         })\n[Form Pengumpulan](${
+        //             sisop.link_pengumpulan
+        //         })\nUploaded on ${jarkom.date.toDateString()}`
+        //     );
+        // }
     } catch (error) {
         console.log(error);
     }
