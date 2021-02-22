@@ -1,22 +1,11 @@
 require("dotenv").config();
 const Discord = require("discord.js");
 const mongoose = require("mongoose");
-const sendMessageToChannel = require("./functions/sendMessageToChannel");
+const shceduler = require("./functions/shceduler");
 const mongoUri = require("./mongoUri");
 const client = new Discord.Client();
 
-const {
-    DISCORD_TOKEN,
-    DISCORD_CHANNEL_ID,
-    TIMEINTERVAL_MS,
-    TIMEINTERVAL_S,
-    TIMEINTERVAL_M,
-} = process.env;
-
-const timeInterval =
-    parseInt(TIMEINTERVAL_MS) *
-    parseInt(TIMEINTERVAL_S) *
-    parseInt(TIMEINTERVAL_M);
+const { DISCORD_TOKEN, DISCORD_CHANNEL_ID } = process.env;
 
 mongoose
     .connect(mongoUri, {
@@ -29,12 +18,8 @@ mongoose
 
 client.on("ready", async () => {
     console.log(`Logged in as ${client.user.tag}!`);
-
     client.channels.fetch(DISCORD_CHANNEL_ID).then(async (channel) => {
-        await sendMessageToChannel(channel, client);
-        setInterval(async () => {
-            await sendMessageToChannel(channel, client);
-        }, timeInterval);
+        shceduler(channel, client);
     });
 });
 

@@ -56,24 +56,19 @@ module.exports = async () => {
                 .then((result) => result.json())
                 .then(async (res) => {
                     if (res[0].error) {
-                        if (n > 0) {
-                            console.log(`retrying, attempt number ${n}`);
-                            await writeSession();
-
-                            wrapper(n--);
-                        } else {
-                            reject(res[0].error);
-                        }
+                        throw res[0].error;
                     } else {
                         resolve(res[0]);
                     }
                 })
                 .catch(async (err) => {
                     if (n > 0) {
-                        console.log(`retrying, attempt number ${n}`);
+                        console.log(
+                            `fetchActivity: retrying, attempt number ${n}`
+                        );
                         await writeSession();
-
-                        wrapper(n--);
+                        n = n - 1;
+                        wrapper(n);
                     } else {
                         reject(err);
                     }

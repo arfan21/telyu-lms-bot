@@ -4,6 +4,11 @@ const embedMessage = require("./embedMessage");
 const { DISCORD_CHANNEL_ID } = process.env;
 
 module.exports = async (channel, client) => {
+    console.log(
+        `${new Date().toLocaleString("id-ID", {
+            timeZone: "Asia/Jakarta",
+        })} START: sending message to channel : ${DISCORD_CHANNEL_ID}`
+    );
     const channelName = channel.name;
     const lastMessageID = channel.lastMessageID;
     const { embed, banyak_tugas_lms } = await embedMessage();
@@ -13,20 +18,23 @@ module.exports = async (channel, client) => {
     );
 
     if (lastMessageID === null) {
-        console.log(`sending message to channel : ${DISCORD_CHANNEL_ID}`);
-
         await channel.send(embed);
 
-        console.log(`SUCCESS : message sent`);
+        console.log(
+            `${new Date().toLocaleString("id-ID", {
+                timeZone: "Asia/Jakarta",
+            })} SUCCESS : message sent`
+        );
     }
     try {
-        console.log(`sending message to channel : ${DISCORD_CHANNEL_ID}`);
-
         let msg = await channel.messages.fetch(lastMessageID);
-
         await msg.edit(embed);
 
-        console.log(`SUCCESS : message sent`);
+        console.log(
+            `${new Date().toLocaleString("id-ID", {
+                timeZone: "Asia/Jakarta",
+            })} SUCCESS : message sent`
+        );
     } catch (error) {
         console.log(`ERROR : sending message to channel : ${error.message}`);
 
