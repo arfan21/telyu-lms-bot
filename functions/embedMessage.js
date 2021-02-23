@@ -6,6 +6,7 @@ const getSisop = require("../mongo-handler/getSisop");
 const getTugas = require("../mongo-handler/getTugas");
 
 module.exports = async () => {
+    const tick = new Date().getMinutes();
     const exampleEmbed = new Discord.MessageEmbed()
         .setColor("#0099ff")
         .setAuthor(
@@ -13,7 +14,10 @@ module.exports = async () => {
             "https://i.imgur.com/wSTFkRM.png"
         )
         .setTimestamp()
-        .setFooter("Last updated", "https://i.imgur.com/wSTFkRM.png");
+        .setFooter(
+            `${tick % 2 === 0 ? "⚪" : "⚫"} Last updated`,
+            "https://i.imgur.com/wSTFkRM.png"
+        );
 
     try {
         const [data, jarkom, sisop] = await Promise.all([

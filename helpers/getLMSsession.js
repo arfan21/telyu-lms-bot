@@ -1,12 +1,14 @@
 const puppeteer = require("puppeteer");
 
+const lmsLink = "https://lms.telkomuniversity.ac.id/login/index.php";
+
 module.exports = async () => {
     const browser = await puppeteer.launch({ headless: true });
     try {
         const page = await browser.newPage();
         console.log("Login page lms ...");
-        const link = "https://lms.telkomuniversity.ac.id/login/index.php";
-        await page.goto(link, {
+
+        await page.goto(lmsLink, {
             waitUntil: "networkidle2",
         });
 
