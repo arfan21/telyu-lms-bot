@@ -9,12 +9,10 @@ const TugasSchema = new schema({
     tugas: {
         type: String,
         required: true,
-        unique: true,
     },
     link: {
         type: String,
         required: true,
-        unique: true,
     },
     deadline: {
         type: Date,

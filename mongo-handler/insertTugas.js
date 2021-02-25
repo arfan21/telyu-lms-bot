@@ -9,7 +9,13 @@ module.exports = async (data) => {
         tugas.link = item.url;
         tugas.deadline = new Date(item.timestart * 1000);
 
-        promises.push(Tugas.findOneAndUpdate(tugas, tugas, { upsert: true }));
+        promises.push(
+            Tugas.findOneAndUpdate(
+                { matkul: tugas.matkul, tugas: tugas.tugas },
+                tugas,
+                { upsert: true }
+            )
+        );
     });
     Promise.all(promises)
         .then((res) => {
