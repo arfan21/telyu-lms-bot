@@ -6,10 +6,13 @@ module.exports = async () => {
     const browser = await puppeteer.launch({ headless: true });
     try {
         const page = await browser.newPage();
+        await page.setDefaultTimeout(15000);
+        await page.setDefaultNavigationTimeout(15000);
         console.log("Login page lms ...");
 
         await page.goto(lmsLink, {
             waitUntil: "networkidle2",
+            timeout: 15000,
         });
 
         let lmsBtn = await page.$$("a.btn-block");

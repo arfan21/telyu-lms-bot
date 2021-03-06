@@ -5,6 +5,8 @@ const shceduler = require("./functions/shceduler");
 const mongoUri = require("./mongoUri");
 const client = new Discord.Client();
 const cron = require("node-cron");
+const tugasStream = require("./mongo-handler/tugasStream");
+const jarkomStream = require("./mongo-handler/jarkomStream");
 
 const { DISCORD_TOKEN, DISCORD_CHANNEL_ID } = process.env;
 
@@ -21,6 +23,8 @@ mongoose
     .catch((err) => console.log(err));
 
 client.on("ready", async () => {
+    tugasStream(client);
+    jarkomStream(client);
     console.log(`Logged in as ${client.user.tag}!`);
     client.channels.fetch(DISCORD_CHANNEL_ID).then(async (channel) => {
         shceduler(channel, client);

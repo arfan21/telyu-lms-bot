@@ -12,6 +12,7 @@ module.exports = async () => {
     const dateAfterUnix = (dateAfter.getTime() / 1000).toFixed(0);
 
     return new Promise(async (resolve, reject) => {
+        console.log("fetch tugas from LMS API ...");
         const wrapper = async (n) => {
             const session = await readSession();
             const sesskey = session.sesskey;
