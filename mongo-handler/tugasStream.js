@@ -1,6 +1,9 @@
 const Tugas = require("../models/Tugas");
-const Discord = require("discord.js");
-const { DISCORD_CHANNEL_STREAM_ID } = process.env;
+const {
+    DISCORD_CHANNEL_STREAM_ID,
+    DISCORD_KELAS_ROLE,
+    DISCORD_CHANNEL_ID,
+} = process.env;
 module.exports = async (client) => {
     const channel = await client.channels.fetch(DISCORD_CHANNEL_STREAM_ID);
 
