@@ -8,7 +8,7 @@ const cron = require("node-cron");
 const tugasStream = require("./mongo-handler/tugasStream");
 const jarkomStream = require("./mongo-handler/jarkomStream");
 
-const { DISCORD_TOKEN, DISCORD_CHANNEL_ID } = process.env;
+const { DISCORD_TOKEN, DISCORD_CHANNEL_ID, DISCORD_KELAS_ROLE } = process.env;
 
 mongoose.set("useNewUrlParser", true);
 mongoose.set("useFindAndModify", false);
