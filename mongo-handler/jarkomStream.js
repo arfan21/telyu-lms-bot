@@ -3,7 +3,6 @@ const Jarkom = require("../models/Jarkom");
 const { DISCORD_CHANNEL_STREAM_ID } = process.env;
 module.exports = async (client) => {
     const channel = await client.channels.fetch(DISCORD_CHANNEL_STREAM_ID);
-    const embed = new Discord.MessageEmbed();
 
     Jarkom.watch().on("change", (event) => {
         console.log(`jarkom activty : ${event.operationType}`);
@@ -20,9 +19,6 @@ module.exports = async (client) => {
                     insertedData.title
                 }***. cek channel <#${DISCORD_CHANNEL_ID}>`
             );
-
-            channel.send(embed);
-            channel.send("@everyone");
         }
     });
 };

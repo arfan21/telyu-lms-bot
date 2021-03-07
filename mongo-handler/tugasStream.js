@@ -3,7 +3,6 @@ const Discord = require("discord.js");
 const { DISCORD_CHANNEL_STREAM_ID } = process.env;
 module.exports = async (client) => {
     const channel = await client.channels.fetch(DISCORD_CHANNEL_STREAM_ID);
-    const embed = new Discord.MessageEmbed();
 
     Tugas.watch().on("change", (event) => {
         console.log(`tugas activty : ${event.operationType}`);
