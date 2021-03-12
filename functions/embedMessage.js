@@ -20,16 +20,16 @@ module.exports = async () => {
         );
 
     try {
-        const [data, jarkom, sisop] = await Promise.all([
+        const [tugas, jarkom] = await Promise.all([
             fetchActivity(),
             getJarkom(),
-            getSisop(),
         ]);
 
-        const listActions = data.data.events;
+        const listActions = tugas.data.events;
         await insertTugas(listActions);
 
         const tugas_lms = await getTugas();
+
         var banyak_tugas_lms = tugas_lms.length;
         tugas_lms.forEach((item) => {
             const timeLocal = item.deadline.toLocaleString("id-ID", {
@@ -66,34 +66,6 @@ module.exports = async () => {
                 })\n[Form Pengumpulan](${
                     jarkom.link_pengumpulan
                 })\nCreated at ${jarkom.date.toLocaleString("id-ID", {
-                    timeZone: "Asia/Jakarta",
-                    dateStyle: "medium",
-                })}`,
-                true
-            );
-        }
-
-        if (!sisop) {
-            exampleEmbed.addField(
-                "TUGAS LAB JARINGAN KOMPUTER",
-                `[sumber website lab informatika](https://informatics.labs.telkomuniversity.ac.id/category/praktikum/sistem-operasi/)\n\nBelum ada tugas lab sistem operasi\n${new Date().toLocaleString(
-                    "id-ID",
-                    {
-                        timeZone: "Asia/Jakarta",
-                    }
-                )}`,
-                true
-            );
-        } else {
-            exampleEmbed.addField(
-                "TUGAS LAB JARINGAN KOMPUTER",
-                `[sumber website lab informatika](https://informatics.labs.telkomuniversity.ac.id/category/praktikum/jaringan-komputer-if-it/)\n\n[${
-                    sisop.title
-                }](${sisop.link_halaman})\n[Soal Tugas](${
-                    sisop.link_soal
-                })\n[Form Pengumpulan](${
-                    sisop.link_pengumpulan
-                })\nCreated at ${sisop.date.toLocaleString("id-ID", {
                     timeZone: "Asia/Jakarta",
                     dateStyle: "medium",
                 })}`,

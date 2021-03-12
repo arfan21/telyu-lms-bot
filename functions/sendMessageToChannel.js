@@ -36,10 +36,12 @@ module.exports = async (channel, client) => {
             })} SUCCESS : message sent`
         );
     } catch (error) {
-        console.log(`ERROR : sending message to channel : ${error.message}`);
+        console.log(
+            `ERROR : sending message to channel -> ${error.httpStatus} | ${error.message}`
+        );
 
         if (error.httpStatus === 403) {
-            await deleteAllMessage(channel);
+            deleteAllMessage(channel);
             console.log(
                 `RETRY : sending message to channel : ${DISCORD_CHANNEL_ID}`
             );
@@ -50,6 +52,7 @@ module.exports = async (channel, client) => {
         }
 
         if (error.httpStatus === 404) {
+            deleteAllMessage(channel);
             console.log(
                 `RETRY : sending message to channel : ${DISCORD_CHANNEL_ID}`
             );
