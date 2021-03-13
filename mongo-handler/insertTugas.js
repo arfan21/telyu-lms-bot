@@ -17,11 +17,6 @@ module.exports = async (data) => {
             )
         );
     });
-    Promise.all(promises)
-        .then((res) => {
-            console.log("data inserted");
-        })
-        .catch((error) => {
-            console.log(error.message);
-        });
+    await Promise.all(promises);
+    console.log("data inserted");
 };
