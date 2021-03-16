@@ -3,7 +3,7 @@ const insertJarkom = require("./insertJarkom");
 
 module.exports = async () => {
     const timeNowMin = new Date();
-    timeNowMin.setDate(timeNowMin.getDate() - 4);
+    timeNowMin.setDate(timeNowMin.getDate() - 5);
 
     return new Promise(async (resolve, reject) => {
         const wrapper = async (n) => {
