@@ -89,6 +89,10 @@ module.exports = async () => {
             }
         });
 
+        if (dataJarkom.link_halaman === "") {
+            throw new Error("jarkom: not found");
+        }
+
         console.log("fetch page tugas jarkom ...");
         const bodyPageTugas = await fetch(dataJarkom.link_halaman, {
             method: "GET",
