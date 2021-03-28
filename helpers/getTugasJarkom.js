@@ -4,6 +4,8 @@ const fetch = require("node-fetch");
 const jarkomLink =
     "https://informatics.labs.telkomuniversity.ac.id/category/praktikum/jaringan-komputer-if-it/";
 
+const linkPengumpulan = "https://bit.ly/FormTPJRK";
+
 const selectorTitleLink = ".entry-title > a";
 const selectorDay = ".day";
 const selectorMonth = ".month";
@@ -108,7 +110,7 @@ module.exports = async () => {
             linksTugas.push(elm.getAttribute("href"));
         });
         dataJarkom.link_soal = linksTugas[0] ?? "";
-        dataJarkom.link_pengumpulan = linksTugas[1] ?? "";
+        dataJarkom.link_pengumpulan = linksTugas[1] ?? linkPengumpulan;
 
         return dataJarkom;
     } catch (error) {
