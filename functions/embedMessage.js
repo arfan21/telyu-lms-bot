@@ -2,7 +2,6 @@ const Discord = require("discord.js");
 const fetchActivity = require("./fetchActivity");
 const insertTugas = require("../mongo-handler/insertTugas");
 const getJarkom = require("../mongo-handler/getJarkom");
-const getSisop = require("../mongo-handler/getSisop");
 const getTugas = require("../mongo-handler/getTugas");
 
 module.exports = async () => {
