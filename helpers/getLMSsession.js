@@ -4,6 +4,10 @@ const lmsLink = "https://lms.telkomuniversity.ac.id/login/index.php";
 
 module.exports = async () => {
     const browser = await puppeteer.launch({ headless: true });
+    const session = {
+        sesskey: "",
+        moodlesession: {},
+    };
     try {
         const page = await browser.newPage();
         await page.setDefaultTimeout(15000);
@@ -47,6 +51,15 @@ module.exports = async () => {
         console.log("redirect to lms ...");
         await page.waitForNavigation({ waitUntil: "domcontentloaded" });
 
+        //check LMS if MT
+        const checkLmsMT = await page.$("#page-maintenance-message");
+
+        if (checkLmsMT) {
+            session.sesskey = "LMS Maintenance";
+            return session;
+            // throw new Error("LMS Maintenance");
+        }
+
         console.log("try to get sesskey and moodlesession ...");
         const data = await page.evaluate(() => {
             const list_a = Array.from(
@@ -71,17 +84,14 @@ module.exports = async () => {
             }
         });
 
-        const session = {
-            sesskey: "",
-            moodlesession: {},
-        };
         session.sesskey = sesskey;
         session.moodlesession = MoodleSession;
 
         await browser.close();
         return session;
     } catch (error) {
-        console.log(error.message);
+        console.log("getLMSsession :", error);
+        return;
     } finally {
         await browser.close();
     }

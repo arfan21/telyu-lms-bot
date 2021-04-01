@@ -17,7 +17,11 @@ module.exports = async () => {
             const session = await readSession();
             const sesskey = session.sesskey;
             const moodlesession = session.moodlesession.value;
-
+            if (sesskey === "LMS Maintenance") {
+                console.log("Fetch activity : LMS Maintenance");
+                resolve(null);
+                return;
+            }
             await fetch(
                 `https://lms.telkomuniversity.ac.id/lib/ajax/service.php?sesskey=${sesskey}&info=core_calendar_get_action_events_by_timesort`,
                 {
@@ -71,7 +75,7 @@ module.exports = async () => {
                         n = n - 1;
                         wrapper(n);
                     } else {
-                        reject(err);
+                        resolve(null);
                     }
                 });
         };

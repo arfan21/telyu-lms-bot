@@ -24,9 +24,10 @@ module.exports = async () => {
             fetchActivity(),
             getJarkom(),
         ]);
-
-        const listActions = tugas.data.events;
-        await insertTugas(listActions);
+        if (tugas) {
+            const listActions = tugas.data.events;
+            await insertTugas(listActions);
+        }
 
         const tugas_lms = await getTugas();
 
@@ -73,7 +74,7 @@ module.exports = async () => {
             );
         }
     } catch (error) {
-        console.log(error);
+        console.log("embed message : ", error);
     }
     return {
         embed: exampleEmbed,
