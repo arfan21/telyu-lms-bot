@@ -1,6 +1,6 @@
 # Discord bot Telyu LMS
 
-> discord bot to take assignments for courses in Telyu LMS
+> discord bot to retrieve task list in telyu LMS
 
 ## task list view
 ![task list view](https://user-images.githubusercontent.com/48755707/119907184-ed699600-bf79-11eb-8f3c-3e697ad97a95.png)
