@@ -1,5 +1,5 @@
-const Tugas = require('../../models/Tugas');
-const notificationTask = require('../TemplateMessage/notificationTask');
+const Tugas = require("../model/Tugas");
+const notificationTask = require("../TemplateMessage/notificationTask");
 
 module.exports = {
     InsertTasks: async (data) => {
@@ -16,12 +16,12 @@ module.exports = {
                     Tugas.findOneAndUpdate(
                         { matkul: tugas.matkul, tugas: tugas.tugas },
                         tugas,
-                        { upsert: true },
-                    ),
+                        { upsert: true }
+                    )
                 );
             });
             await Promise.all(promises);
-            console.log('data tasks inserted');
+            console.log("data tasks inserted");
         } catch (error) {
             return error;
         }
@@ -32,7 +32,7 @@ module.exports = {
                 deadline: { $gte: new Date() },
             }).sort({ deadline: 1 });
 
-            console.log('success get all tasks');
+            console.log("success get all tasks");
 
             return data;
         } catch (error) {
@@ -48,9 +48,9 @@ module.exports = {
 
         const channel = await client.channels.fetch(DISCORD_CHANNEL_STREAM_ID);
 
-        Tugas.watch().on('change', (event) => {
+        Tugas.watch().on("change", (event) => {
             console.log(`tugas activty : ${event.operationType}`);
-            if (event.operationType === 'insert') {
+            if (event.operationType === "insert") {
                 const insertedData = event.fullDocument;
 
                 channel.send(
@@ -58,8 +58,8 @@ module.exports = {
                         DISCORD_KELAS_ROLE,
                         DISCORD_CHANNEL_ID,
                         insertedData.matkul,
-                        insertedData.tugas,
-                    ),
+                        insertedData.tugas
+                    )
                 );
             }
         });
