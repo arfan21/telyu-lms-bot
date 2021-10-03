@@ -1,19 +1,17 @@
 const fs = require("fs");
+const path = require("path");
+const { promisify } = require("util");
 
 module.exports = async () => {
+    const sessiondir = path.join(__dirname, "/./../../session.json");
+    const readFileAsync = promisify(fs.readFile);
     try {
-        let rawdata = fs.readFileSync("../session.json");
-        if (rawdata.length > 0) {
-            return JSON.parse(rawdata);
-        }
-        return {
-            session: "",
-            moodlesession: {},
-        };
+        let rawdata = await readFileAsync(sessiondir);
+        let data = JSON.parse(rawdata);
+
+        return data;
     } catch (error) {
-        return {
-            session: "",
-            moodlesession: {},
-        };
+        console.log("ReadSession: ", error);
+        return null;
     }
 };

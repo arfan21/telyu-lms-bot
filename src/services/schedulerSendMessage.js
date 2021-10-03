@@ -8,11 +8,11 @@ require("dotenv").config({ path: path.join(__dirname, "/./../../.env") });
 
 const { TIME_SCHEDULE, DISCORD_CHANNEL_ID } = process.env;
 
-module.exports = async (channel, client) => {
+module.exports = async (client) => {
     cron.schedule(
         TIME_SCHEDULE,
         () => {
-            send(channel, client);
+            send(client);
         },
         {
             timezone: "Asia/Jakarta",
@@ -22,32 +22,31 @@ module.exports = async (channel, client) => {
 };
 
 const send = async (client) => {
-    const channel = await client.channels.fetch(DISCORD_CHANNEL_ID, {
-        cache: true,
-        force: true,
-    });
-
-    console.log(
-        `${new Date().toLocaleString("id-ID", {
-            timeZone: "Asia/Jakarta",
-        })} START: sending message to channel : ${DISCORD_CHANNEL_ID}`
-    );
-    const channelName = channel.name;
-    const lastMessageID = channel.lastMessageId;
-    console.log("last ID ====>", lastMessageID);
     try {
-        // const tasksLms = await getTasksFromWeb();
-        // if (tasksLms) {
-        //     const listTask = tasksLms.data.events;
-        //     await TasksService.InsertTasks(listTask);
-        // }
+        var channel = await client.channels.fetch(DISCORD_CHANNEL_ID, {
+            cache: true,
+            force: true,
+        });
 
-        // const listTasks = await TasksService.GetTasks();
-        var embedMsg = embedMsgListTasks(null);
+        console.log(
+            `${new Date().toLocaleString("id-ID", {
+                timeZone: "Asia/Jakarta",
+            })} START: sending message to channel : ${DISCORD_CHANNEL_ID}`
+        );
+        const channelName = channel.name;
+        const lastMessageID = channel.lastMessageId;
 
-        // client.user.setActivity(
-        //     `LMS Ada ${listTasks.length} Tugas|cek channel ${channelName}|play music gunakan /play (pilih yang telyu LeMeS)`
-        // );
+        const tasksLms = await getTasksFromWeb();
+        if (tasksLms) {
+            await TasksService.InsertTasks(tasksLms);
+        }
+
+        const listTasks = await TasksService.GetTasks();
+        var embedMsg = embedMsgListTasks(listTasks);
+
+        client.user.setActivity(
+            `LMS Ada ${listTasks.length} Tugas|cek channel ${channelName}|play music gunakan /play (pilih yang telyu LeMeS)`
+        );
 
         if (lastMessageID === null) {
             await channel.send({ embeds: [embedMsg] });
@@ -57,15 +56,19 @@ const send = async (client) => {
                     timeZone: "Asia/Jakarta",
                 })} SUCCESS : message sent`
             );
+
+            return;
         }
 
-        let msg = await channel.messages.fetch(lastMessageID);
+        let msg = await channel.messages.fetch(lastMessageID, {
+            cache: true,
+            force: true,
+        });
         await msg.edit({ embeds: [embedMsg] });
-
         console.log(
             `${new Date().toLocaleString("id-ID", {
                 timeZone: "Asia/Jakarta",
-            })} SUCCESS : message embed edited`
+            })} SUCCESS : EDIT Embeds message`
         );
     } catch (error) {
         console.log(

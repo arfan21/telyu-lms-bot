@@ -3,9 +3,10 @@ const Discord = require("discord.js");
 module.exports = (tasks) => {
     const tick = new Date().getMinutes();
     const discordEmbedMsg = new Discord.MessageEmbed();
+
     discordEmbedMsg.setColor("#0099ff");
     discordEmbedMsg.setAuthor(
-        "Tugas IF-43-12 LMS dan LAB",
+        "Tugas Warga IF-43-12 LMS tapi kelasnya beda2 :v dan LAB",
         "https://i.imgur.com/wSTFkRM.png"
     );
     discordEmbedMsg.setTimestamp();

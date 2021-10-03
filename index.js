@@ -4,6 +4,7 @@ const { SlashCreator, GatewayServer } = require("slash-create");
 const { Client } = require("discord.js");
 const { Player } = require("discord-player");
 const { registerPlayerEvents } = require("./events");
+const { generateDocs } = require("./docs");
 
 dotenv.config();
 
@@ -18,13 +19,6 @@ const creator = new SlashCreator({
     applicationID: process.env.DISCORD_CLIENT_ID,
     token: process.env.DISCORD_CLIENT_TOKEN,
 });
-
-// client.on('ready', () => {
-//     console.log(`Logged in as ${client.user.tag}!`);
-
-//     console.log('Generating docs...');
-//     generateDocs(creator.commands);
-// });
 
 creator
     .withServer(
@@ -47,49 +41,59 @@ const mongoUri = require("./mongoUri");
 const mongoose = require("mongoose");
 const schedulerSendMessage = require("./src/services/schedulerSendMessage");
 const cron = require("node-cron");
-
-mongoose.set("useNewUrlParser", true);
-mongoose.set("useFindAndModify", false);
-mongoose.set("useCreateIndex", true);
-mongoose
-    .connect(mongoUri, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-        useFindAndModify: false,
-    })
-    .then(() => console.log("mongoDB Connected"))
-    .catch((err) => console.log(err));
+const TasksService = require("./src/services/TasksService");
+const { WatchTasks } = require("./src/services/TasksService");
 
 client.on("ready", async () => {
     console.log(`Logged in as ${client.user.tag}!`);
 
-    schedulerSendMessage(client);
-    cron.schedule(
-        "*/3 * * * * *",
-        async () => {
-            try {
-                const channel = await client.channels.fetch(
-                    process.env.DISCORD_CHANNEL_ID,
-                    {
-                        cache: true,
-                        force: true,
-                    }
-                );
-                const tick = new Date().getSeconds();
-                const lastMessageID = channel.lastMessageId;
-                const lastMsg = await channel.messages.fetch(lastMessageID);
-                const embed = lastMsg.embeds[0];
+    try {
+        mongoose.set("useNewUrlParser", true);
+        mongoose.set("useFindAndModify", false);
+        mongoose.set("useCreateIndex", true);
+        await mongoose.connect(mongoUri, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+            useFindAndModify: false,
+        });
+        console.log("mongoDB Connected");
+        TasksService.WatchTasks(client);
+        schedulerSendMessage(client);
 
-                embed.footer.text = `${
-                    tick % 2 === 0 ? "⚪" : "⚫"
-                } Last updated`;
-                lastMsg.edit({ embeds: [embed] });
-            } catch (error) {
-                console.log(error.message);
+        cron.schedule(
+            "*/3 * * * * *",
+            async () => {
+                try {
+                    const channel = await client.channels.fetch(
+                        process.env.DISCORD_CHANNEL_ID,
+                        {
+                            cache: true,
+                            force: true,
+                        }
+                    );
+                    const tick = new Date().getSeconds();
+                    const lastMessageID = channel.lastMessageId;
+                    const lastMsg = await channel.messages.fetch(
+                        lastMessageID,
+                        {
+                            cache: true,
+                            force: true,
+                        }
+                    );
+                    const embed = lastMsg.embeds[0];
+                    embed.footer.text = `${
+                        tick % 2 === 0 ? "⚪" : "⚫"
+                    } Last updated`;
+                    await lastMsg.edit({ embeds: [embed] });
+                } catch (error) {
+                    console.log(error.message);
+                }
+            },
+            {
+                timezone: "Asia/Jakarta",
             }
-        },
-        {
-            timezone: "Asia/Jakarta",
-        }
-    );
+        );
+    } catch (error) {
+        console.log(error.message);
+    }
 });

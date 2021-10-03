@@ -11,6 +11,7 @@ module.exports = {
                 tugas.tugas = item.name;
                 tugas.link = item.url;
                 tugas.deadline = new Date(item.timestart * 1000);
+                console.log("Insert task ->", tugas.matkul);
 
                 promises.push(
                     Tugas.findOneAndUpdate(
@@ -40,6 +41,7 @@ module.exports = {
         }
     },
     WatchTasks: async (client) => {
+        console.log("watch db started");
         const {
             DISCORD_CHANNEL_STREAM_ID,
             DISCORD_KELAS_ROLE,
@@ -53,6 +55,17 @@ module.exports = {
             if (event.operationType === "insert") {
                 const insertedData = event.fullDocument;
 
+                if (insertedData.matkul.includes("IF-44-06")) {
+                    channel.send(
+                        notificationTask(
+                            "605483117100269616", // id discord firsta
+                            DISCORD_CHANNEL_ID,
+                            insertedData.matkul,
+                            insertedData.tugas
+                        )
+                    );
+                    return;
+                }
                 channel.send(
                     notificationTask(
                         DISCORD_KELAS_ROLE,
