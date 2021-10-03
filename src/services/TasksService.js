@@ -1,5 +1,9 @@
 const Tugas = require("../model/Tugas");
+const TugasLab = require("../model/TugasLab");
 const notificationTask = require("../TemplateMessage/notificationTask");
+
+const { DISCORD_CHANNEL_STREAM_ID, DISCORD_KELAS_ROLE, DISCORD_CHANNEL_ID } =
+    process.env;
 
 module.exports = {
     InsertTasks: async (data) => {
@@ -41,12 +45,7 @@ module.exports = {
         }
     },
     WatchTasks: async (client) => {
-        console.log("watch db started");
-        const {
-            DISCORD_CHANNEL_STREAM_ID,
-            DISCORD_KELAS_ROLE,
-            DISCORD_CHANNEL_ID,
-        } = process.env;
+        console.log("watch db tasks started");
 
         const channel = await client.channels.fetch(DISCORD_CHANNEL_STREAM_ID);
 
@@ -73,6 +72,67 @@ module.exports = {
                         insertedData.matkul,
                         insertedData.tugas
                     )
+                );
+            }
+        });
+    },
+    InsertTasksLab: async (data) => {
+        try {
+            if (data) {
+                console.log("Insert task lab ->", data.title);
+                await TugasLab.findOneAndUpdate(
+                    {
+                        title: data.title,
+                        link_halaman: data.link_halaman,
+                    },
+                    data,
+                    {
+                        upsert: true,
+                    }
+                );
+                console.log("tugas lab inserted");
+            } else {
+                throw new Error("tugas lab data null");
+            }
+        } catch (error) {
+            console.log("InsertTasksLab: ", error);
+            return error;
+        }
+    },
+    GetTasksLab: async () => {
+        const timeNowMin = new Date();
+        timeNowMin.setDate(timeNowMin.getDate() - 5);
+
+        try {
+            const data = await TugasLab.findOne({
+                date: { $gte: timeNowMin },
+            });
+
+            console.log("success get all tasks lab");
+
+            return data;
+        } catch (error) {
+            return error;
+        }
+    },
+    WatchTasksLab: async (client) => {
+        console.log("watch db tasks lab started");
+        const channel = await client.channels.fetch(DISCORD_CHANNEL_STREAM_ID);
+
+        TugasLab.watch().on("change", (event) => {
+            console.log(`TugasLab activty : ${event.operationType}`);
+            if (event.operationType === "insert") {
+                const insertedData = event.fullDocument;
+
+                channel.send(
+                    `<@&${DISCORD_KELAS_ROLE}>\n${new Date().toLocaleString(
+                        "id-ID",
+                        {
+                            timeZone: "Asia/Jakarta",
+                        }
+                    )} : ada tugas baru ***LAB PBO : ${
+                        insertedData.title
+                    }***. cek channel <#${DISCORD_CHANNEL_ID}>`
                 );
             }
         });

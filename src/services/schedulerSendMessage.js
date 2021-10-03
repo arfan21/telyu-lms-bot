@@ -2,6 +2,7 @@ const cron = require("node-cron");
 const path = require("path");
 const deleteAllMessageInChannel = require("../helpers/deleteAllMessageInChannel");
 const getTasksFromWeb = require("../scraper/LmsTelkomUniv/getTasksFromWeb");
+const getTasksLab = require("../scraper/LmsTelkomUniv/getTasksLab");
 const embedMsgListTasks = require("../TemplateMessage/embedMsgListTasks");
 const TasksService = require("./TasksService");
 require("dotenv").config({ path: path.join(__dirname, "/./../../.env") });
@@ -41,8 +42,17 @@ const send = async (client) => {
             await TasksService.InsertTasks(tasksLms);
         }
 
-        const listTasks = await TasksService.GetTasks();
-        var embedMsg = embedMsgListTasks(listTasks);
+        const tasksLab = await getTasksLab();
+        if (tasksLab) {
+            await TasksService.InsertTasksLab(tasksLab);
+        }
+
+        const [listTasks, listTasksLab] = await Promise.all([
+            TasksService.GetTasks(),
+            TasksService.GetTasksLab(),
+        ]);
+
+        var embedMsg = embedMsgListTasks(listTasks, listTasksLab);
 
         client.user.setActivity(
             `LMS Ada ${listTasks.length} Tugas|cek channel ${channelName}|play music gunakan /play (pilih yang telyu LeMeS)`

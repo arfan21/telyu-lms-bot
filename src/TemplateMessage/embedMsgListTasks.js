@@ -1,6 +1,6 @@
 const Discord = require("discord.js");
 
-module.exports = (tasks) => {
+module.exports = (tasks, tasksLab) => {
     const tick = new Date().getMinutes();
     const discordEmbedMsg = new Discord.MessageEmbed();
 
@@ -28,6 +28,21 @@ module.exports = (tasks) => {
     });
 
     discordEmbedMsg.addField("\u200B", "\u200B", false);
+
+    if (tasksLab) {
+        discordEmbedMsg.addField(
+            "TUGAS LAB PBO",
+            `[sumber website lab informatika](https://informatics.labs.telkomuniversity.ac.id/category/praktikum/pbo/)\n\n[${
+                tasksLab.title
+            }](${tasksLab.link_halaman})\n[Soal Tugas](${
+                tasksLab.link_soal
+            })\nCreated at ${tasksLab.date.toLocaleString("id-ID", {
+                timeZone: "Asia/Jakarta",
+                dateStyle: "medium",
+            })}`,
+            true
+        );
+    }
 
     return discordEmbedMsg;
 };

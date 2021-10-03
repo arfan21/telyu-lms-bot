@@ -58,6 +58,7 @@ client.on("ready", async () => {
         });
         console.log("mongoDB Connected");
         TasksService.WatchTasks(client);
+        TasksService.WatchTasksLab(client);
         schedulerSendMessage(client);
 
         cron.schedule(
