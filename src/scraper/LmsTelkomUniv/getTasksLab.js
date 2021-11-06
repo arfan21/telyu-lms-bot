@@ -33,8 +33,9 @@ module.exports = async () => {
 
         titleLink.forEach((elm) => {
             let dataOnElm = { ...data };
-            data.link_halaman = elm.getAttribute("href");
-            allData.push(data);
+
+            dataOnElm.link_halaman = elm.getAttribute("href");
+            allData.push(dataOnElm);
         });
 
         const title =
@@ -70,6 +71,7 @@ module.exports = async () => {
             allDate[index] = `${allDate[index]} ${year}`;
             allDate[index] = new Date(allDate[index]);
             allData[index].date = allDate[index];
+
             if (
                 allData[index].date > timeNowMin &&
                 !allData[index].title.includes("INT")

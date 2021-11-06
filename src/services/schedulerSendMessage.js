@@ -9,11 +9,11 @@ require("dotenv").config({ path: path.join(__dirname, "/./../../.env") });
 
 const { TIME_SCHEDULE, DISCORD_CHANNEL_ID } = process.env;
 
-module.exports = async (client) => {
+const schedulerSendMessage = async (client) => {
     cron.schedule(
         TIME_SCHEDULE,
         () => {
-            send(client);
+            sendMessage(client);
         },
         {
             timezone: "Asia/Jakarta",
@@ -22,7 +22,7 @@ module.exports = async (client) => {
     console.log("starting cron job");
 };
 
-const send = async (client) => {
+const sendMessage = async (client) => {
     try {
         var channel = await client.channels.fetch(DISCORD_CHANNEL_ID, {
             cache: true,
@@ -107,3 +107,5 @@ const send = async (client) => {
         }
     }
 };
+
+module.exports = { schedulerSendMessage, sendMessage };

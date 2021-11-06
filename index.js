@@ -39,14 +39,15 @@ module.exports.creator = creator;
 
 const mongoUri = require("./mongoUri");
 const mongoose = require("mongoose");
-const schedulerSendMessage = require("./src/services/schedulerSendMessage");
 const cron = require("node-cron");
 const TasksService = require("./src/services/TasksService");
-const { WatchTasks } = require("./src/services/TasksService");
+const {
+    schedulerSendMessage,
+    sendMessage,
+} = require("./src/services/schedulerSendMessage");
 
 client.on("ready", async () => {
     console.log(`Logged in as ${client.user.tag}!`);
-
     try {
         mongoose.set("useNewUrlParser", true);
         mongoose.set("useFindAndModify", false);
@@ -57,6 +58,7 @@ client.on("ready", async () => {
             useFindAndModify: false,
         });
         console.log("mongoDB Connected");
+        sendMessage(client);
         TasksService.WatchTasks(client);
         TasksService.WatchTasksLab(client);
         schedulerSendMessage(client);

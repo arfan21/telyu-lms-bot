@@ -86,6 +86,9 @@ const fetchWrapper = async (n, dateBeforeUnix, dateAfterUnix) => {
                     );
                     allTasks.push(responseJSON[0].data.events);
                     if (i === keySessions.length - 1) {
+                        console.log(
+                            `fetchActivity: SUCCESS get all task completed`
+                        );
                         res(allTasks);
                     }
                 }
@@ -124,6 +127,7 @@ module.exports = async () => {
         console.log("fetch all tasks from LMS API ...");
         const dataTask = await fetchWrapper(3, dateBeforeUnix, dateAfterUnix);
         const resultData = [].concat.apply([], dataTask);
+        console.log("SUCCESS : fetch all tasks from LMS API ...");
         return resultData;
     } catch (error) {
         return null;
