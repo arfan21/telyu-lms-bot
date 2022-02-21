@@ -62,40 +62,6 @@ client.on("ready", async () => {
         TasksService.WatchTasks(client);
         TasksService.WatchTasksLab(client);
         schedulerSendMessage(client);
-
-        cron.schedule(
-            "*/3 * * * * *",
-            async () => {
-                try {
-                    const channel = await client.channels.fetch(
-                        process.env.DISCORD_CHANNEL_ID,
-                        {
-                            cache: true,
-                            force: true,
-                        }
-                    );
-                    const tick = new Date().getSeconds();
-                    const lastMessageID = channel.lastMessageId;
-                    const lastMsg = await channel.messages.fetch(
-                        lastMessageID,
-                        {
-                            cache: true,
-                            force: true,
-                        }
-                    );
-                    const embed = lastMsg.embeds[0];
-                    embed.footer.text = `${
-                        tick % 2 === 0 ? "⚪" : "⚫"
-                    } Last updated`;
-                    await lastMsg.edit({ embeds: [embed] });
-                } catch (error) {
-                    console.log(error.message);
-                }
-            },
-            {
-                timezone: "Asia/Jakarta",
-            }
-        );
     } catch (error) {
         console.log(error.message);
     }
