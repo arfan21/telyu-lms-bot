@@ -1,7 +1,6 @@
 const Discord = require("discord.js");
 
 module.exports = (tasks, tasksLab) => {
-    const tick = new Date().getMinutes();
     const discordEmbedMsg = new Discord.MessageEmbed();
 
     discordEmbedMsg.setColor("#0099ff");
@@ -11,7 +10,7 @@ module.exports = (tasks, tasksLab) => {
     );
     discordEmbedMsg.setTimestamp();
     discordEmbedMsg.setFooter(
-        `${tick % 2 === 0 ? "⚪" : "⚫"} Last updated`,
+        `⚪ Last updated`,
         "https://i.imgur.com/wSTFkRM.png"
     );
 

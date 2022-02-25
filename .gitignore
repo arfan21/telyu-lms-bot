@@ -9,3 +9,4 @@ test
 mongoUri.js
 session.json
 account.json
+sso.json

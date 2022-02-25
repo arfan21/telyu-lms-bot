@@ -74,6 +74,7 @@ const sendMessage = async (client) => {
             cache: true,
             force: true,
         });
+        embedMsg.setTimestamp();
         await msg.edit({ embeds: [embedMsg] });
         console.log(
             `${new Date().toLocaleString("id-ID", {
