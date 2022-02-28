@@ -60,7 +60,7 @@ client.on("ready", async () => {
         console.log("mongoDB Connected");
         sendMessage(client);
         TasksService.WatchTasks(client);
-        TasksService.WatchTasksLab(client);
+        // TasksService.WatchTasksLab(client);
         schedulerSendMessage(client);
     } catch (error) {
         console.log(error.message);

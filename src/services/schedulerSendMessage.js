@@ -42,17 +42,14 @@ const sendMessage = async (client) => {
             await TasksService.InsertTasks(tasksLms);
         }
 
-        const tasksLab = await getTasksLab();
-        if (tasksLab) {
-            await TasksService.InsertTasksLab(tasksLab);
-        }
+        // const tasksLab = await getTasksLab();
+        // if (tasksLab) {
+        //     await TasksService.InsertTasksLab(tasksLab);
+        // }
 
-        const [listTasks, listTasksLab] = await Promise.all([
-            TasksService.GetTasks(),
-            TasksService.GetTasksLab(),
-        ]);
+        const [listTasks] = await Promise.all([TasksService.GetTasks()]);
 
-        var embedMsg = embedMsgListTasks(listTasks, listTasksLab);
+        var embedMsg = embedMsgListTasks(listTasks, null);
 
         client.user.setActivity(
             `LMS Ada ${listTasks.length} Tugas|cek channel ${channelName}|play music gunakan /play (pilih yang telyu LeMeS)`
