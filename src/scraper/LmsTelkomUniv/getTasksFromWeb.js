@@ -11,7 +11,7 @@ const fetchWrapper = async (n, dateBeforeUnix, dateAfterUnix) => {
 
         if (
             (n > 0 && !sessions) ||
-            (n > 0 && Object.keys(sessions).length < 2)
+            (n > 0 && Object.keys(sessions).length < keyAccout.length)
         ) {
             for (let i = 0; i < keyAccout.length; i++) {
                 console.log("Start writing session -> ", keyAccout[i]);
